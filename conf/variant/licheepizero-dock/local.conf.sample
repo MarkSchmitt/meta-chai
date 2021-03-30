@@ -1,0 +1,4 @@
+MACHINE = "licheepizero-dock"
+
+#DL_DIR ?= "${HOME}/yocto/downloads"
+#SSTATE_DIR ?= "${HOME}/yocto/sstate"
