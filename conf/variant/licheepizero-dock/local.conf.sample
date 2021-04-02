@@ -1,4 +1,6 @@
 MACHINE = "licheepizero-dock"
 
+MACHINE_FEATURES_remove = " apm"
+
 #DL_DIR ?= "${HOME}/yocto/downloads"
 #SSTATE_DIR ?= "${HOME}/yocto/sstate"
