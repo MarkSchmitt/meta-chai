@@ -42,8 +42,6 @@ TOOLCHAIN_HOST_TASK_append = " nativesdk-cmake"
 VIRTUAL-RUNTIME_dev_manager = "busybox-mdev"
 TCLIBC = "musl"
 
-DISTRO_FEATURES = " ext2 rtc serial usbgadget"
+DISTRO_FEATURES_remove = " x11 wayland opengl pulseaudio opengles egl xcb "
 
 IMAGE_ROOTFS_EXTRA_SPACE = "0"
-
-PACKAGE_EXCLUDE = "busybox-syslog busybox-udhcpc ncurses-terminfo-base thin-provisioning-tool"
