@@ -4,7 +4,8 @@ SRC_URI += " \
     file://002-add-original-lichee-pi-zero-lcd-display.dtsi.patch \
     file://003-add-original-lichee-pi-zero-lcd-touchscreen.dtsi.patch \
     file://004-modify-sun8i-v3s-licheepi-zero.dts.patch \
-    file://005-modify-sun8i-v3s-licheepi-zero-dock.dts.patch  \
+    file://005-modify-sun8i-v3s-licheepi-zero-dock.dts.patch \
+    file://006-add-audio-codec-to-sun8i-v3s.dtsi.patch \
 "
 
 COMPATIBLE_MACHINE = "(licheepizero|licheepizero-dock)"
