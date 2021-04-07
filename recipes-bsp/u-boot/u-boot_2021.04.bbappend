@@ -10,6 +10,7 @@ SRC_URI_append_sun8i = " \
 SRC_URI_append_licheepizero-dock = " \
     file://003-add-zero-dock_defconfig.patch \
     file://004-add-zero-dock.dts.patch \
+    file://005-enable-ethernet-at-zero-dock.patch \
 "
 
 UBOOT_ENV = "boot"
