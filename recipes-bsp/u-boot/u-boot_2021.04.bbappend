@@ -7,6 +7,11 @@ SRC_URI_append_sun8i = " \
     file://ethernet.cfg \
 "
 
+SRC_URI_append_licheepizero-dock = " \
+    file://003-add-zero-dock_defconfig.patch \
+    file://004-add-zero-dock.dts.patch \
+"
+
 UBOOT_ENV = "boot"
 UBOOT_ENV_SUFFIX = "scr"
 

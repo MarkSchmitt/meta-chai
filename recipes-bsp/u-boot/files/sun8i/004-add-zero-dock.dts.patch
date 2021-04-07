@@ -1,0 +1,13 @@
+diff --git a/arch/arm/dts/Makefile b/arch/arm/dts/Makefile
+index c6710826a0..c9d1136c32 100644
+--- a/arch/arm/dts/Makefile
++++ b/arch/arm/dts/Makefile
+@@ -598,6 +598,7 @@ dtb-$(CONFIG_MACH_SUN8I_R40) += \
+ dtb-$(CONFIG_MACH_SUN8I_V3S) += \
+ 	sun8i-s3-pinecube.dtb \
+-	sun8i-v3s-licheepi-zero.dtb
++	sun8i-v3s-licheepi-zero.dtb \
++	sun8i-v3s-licheepi-zero-dock.dtb
+ dtb-$(CONFIG_MACH_SUN50I_H5) += \
+ 	sun50i-h5-bananapi-m2-plus.dtb \
+ 	sun50i-h5-emlid-neutis-n5-devboard.dtb \

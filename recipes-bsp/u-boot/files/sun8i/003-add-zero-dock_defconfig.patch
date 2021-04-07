@@ -1,0 +1,13 @@
+diff --git a/configs/LicheePi_Zero_Dock_defconfig b/configs/LicheePi_Zero_Dock_defconfig
+new file mode 100644
+index 0000000000..04d7b64504
+--- /dev/null
++++ b/configs/LicheePi_Zero_Dock_defconfig
+@@ -0,0 +1,7 @@
++CONFIG_ARM=y
++CONFIG_ARCH_SUNXI=y
++CONFIG_SPL=y
++CONFIG_MACH_SUN8I_V3S=y
++CONFIG_DRAM_CLK=360
++CONFIG_DEFAULT_DEVICE_TREE="sun8i-v3s-licheepi-zero-dock"
++# CONFIG_NETDEVICES is not set
