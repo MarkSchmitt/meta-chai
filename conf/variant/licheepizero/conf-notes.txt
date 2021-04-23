@@ -8,5 +8,6 @@ Available supported images from meta-beet-reference:
  * console-image: A console image for Lichee Pi Zero, Zero-Dock Boards
  * qt5-image: A QT5 image with wifi support application for Lichee Pi Zero Zero-Dock Boards
  * chai-image: A minimal console image for Lichee Pi Zero, Zero-Dock Boards
+ * chai-image-ui: x11 based image
 
 Build them by running: bitbake <image>

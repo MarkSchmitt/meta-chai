@@ -6,6 +6,7 @@ SRC_URI += " \
     file://004-modify-sun8i-v3s-licheepi-zero.dts.patch \
     file://005-modify-sun8i-v3s-licheepi-zero-dock.dts.patch \
     file://006-add-audio-codec-to-sun8i-v3s.dtsi.patch \
+    file://drm.cfg \
 "
 
 COMPATIBLE_MACHINE = "(licheepizero|licheepizero-dock)"

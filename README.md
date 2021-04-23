@@ -15,7 +15,7 @@ First of all, the v3s audio coded has no MIC1 bias. Instead, it looks to me like
 
 ![ALSA settings](./docu/assets/alsa-settings.png)
 
-For easy verification, use the _chai-audio-image_ with the alsa-tools. Just plugin your headphone, setup ALSA like the picture above and run `alsaloop` and verify the microphone 😎️
+For easy verification, use the _chai-image-audio_ with the alsa-tools. Just plugin your headphone, setup ALSA like the picture above and run `alsaloop` and verify the microphone 😎️
 
 ## shutdown / reboot
 
