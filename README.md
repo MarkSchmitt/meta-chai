@@ -22,12 +22,38 @@ For easy verification, use the _chai-image-audio_ with the alsa-tools. Just plug
 The Zero and Zero-Dock uses an __EA3036__ PMIC with routed __enable__ pins to 5V. As a result, the power consumption will not drop to _zero_ on a `shutdown`. A possible workaround could be using a pin to drive a _self-holding circuit_.  
 `reboot` instead works as expected.
 
-## boot from flash
+## sunxi-tools / flash boot
+
+sunxi-tools from github can be used for u-boot / kernel developing and nor-flash programming  
+__HINT:__ official prebuilt packages for ubuntu/debian seems to not working on ubuntu 20.x
+### how to build sunxi-tools
 
 ```bash
-sudo ./sunxi-tools/sunxi-fel spiflash-write 0x0e0000 sun8i-v3s-licheepi-zero-dock-licheepizero-dock.dtb
-sudo ./sunxi-tools/sunxi-fel spiflash-write 0x100000 zImage-licheepizero-dock.bin
+sudo apt install libfdt-dev libusb-1.0-0-dev
+git clone git@github.com:linux-sunxi/sunxi-tools.git
+cd sunxi-tools
+make
+```
+
+### fel boot
+
+```bash
+sudo sunxi-tools/sunxi-fel -v uboot u-boot-sunxi-with-spl.bin \
+    write 0x42000000 zImage \
+    write 0x43000000 sun8i-v3s-licheepi-zero-dock.dtb \
+    write 0x43100000 boot.scr
+```
+
+### program flash and boot from fel / flash
+
+write kernel, dtb to flash and start uboot from fel cli
+```bash
+sudo ./sunxi-tools/sunxi-fel \
+    spiflash-write 0x0e0000 sun8i-v3s-licheepi-zero-dock-licheepizero-dock.dtb \
+    spiflash-write 0x100000 zImage-licheepizero-dock.bin
 sudo ./sunxi-tools/sunxi-fel uboot u-boot-sunxi-with-spl.bin
-# or write spl to 0x0
-# sudo ./sunxi-tools/sunxi-fel spiflash-write 0x0 u-boot-sunxi-with-spl.bin
+```
+for booting from flash
+```bash
+sudo ./sunxi-tools/sunxi-fel spiflash-write 0x0 u-boot-sunxi-with-spl.bin
 ```
