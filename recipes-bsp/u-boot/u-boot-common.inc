@@ -10,6 +10,8 @@ LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=5a7450c57ffe5ae63fd732446b988025"
 PE = "1"
 
+SRCREV = "b46dd116ce03e235f2a7d4843c6278e1da44b5e1"
+
 SRC_URI = "git://git.denx.de/u-boot.git \
           "
 

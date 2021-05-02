@@ -9,5 +9,4 @@ require u-boot.inc
 
 DEPENDS += "bc-native dtc-native python3-setuptools-native"
 
-SRCREV = "b46dd116ce03e235f2a7d4843c6278e1da44b5e1"
 PV = "v${UBOOT_VERSION}+git${SRCPV}"

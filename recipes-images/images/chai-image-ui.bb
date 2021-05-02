@@ -3,6 +3,7 @@ inherit chai-image
 IMAGE_INSTALL_append = " \
     alsa-utils \
     htop \
+    rectangles \
 "
 
 IMAGE_FEATURES += " \
@@ -12,5 +13,9 @@ IMAGE_FEATURES += " \
 
 KERNEL_EXTRA_INSTALL += "\
     kernel-modules \
-    sunxi-mali \
 "
+
+# VIRTUAL-RUNTIME_dev_manager = ""
+# VIRTUAL-RUNTIME_login_manager = ""
+# VIRTUAL-RUNTIME_init_manager = "tiny-init"
+# VIRTUAL-RUNTIME_keymaps = ""

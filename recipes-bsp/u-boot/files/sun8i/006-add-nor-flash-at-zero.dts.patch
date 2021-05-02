@@ -68,3 +68,32 @@ index 0135575ca1..b222596738 100644
  	help
  	  Enable support for SPI Flash. This option allows SPL to read from
  	  sunxi SPI Flash. It uses the same method as the boot ROM, so does
+diff --git a/board/sunxi/board.c b/board/sunxi/board.c
+index 21651a1bfc..ac493df9ca 100644
+--- a/board/sunxi/board.c
++++ b/board/sunxi/board.c
+@@ -41,6 +41,8 @@
+ #include <env_internal.h>
+ #include <linux/libfdt.h>
+ #include <fdt_support.h>
++#include <mtd_node.h>
++#include <jffs2/load_kernel.h>
+ #include <nand.h>
+ #include <net.h>
+ #include <spl.h>
+@@ -982,6 +984,16 @@ int ft_board_setup(void *blob, struct bd_info *bd)
+ 	if (r)
+ 		return r;
+ #endif
++
++#if defined(CONFIG_FDT_FIXUP_PARTITIONS)
++	static const struct node_info nodes[] = {
++		{ "jedec,spi-nor",	MTD_DEV_TYPE_NOR, },
++	};
++
++	/* Update partition nodes using info from mtdparts env var */
++	puts("   Updating MTD partitions...\n");
++	fdt_fixup_mtdparts(blob, nodes, ARRAY_SIZE(nodes));
++#endif
+ 	return 0;
+ }

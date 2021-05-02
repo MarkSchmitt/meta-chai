@@ -4,3 +4,9 @@ MACHINE_FEATURES_remove = " apm"
 
 #DL_DIR ?= "${HOME}/yocto/downloads"
 #SSTATE_DIR ?= "${HOME}/yocto/sstate"
+
+IMAGE_FSTYPES += " ubi jffs2"
+UBI_VOLNAME = "rootfs"
+
+# MKUBIFS_ARGS ?= " -e 0x1f000 -c 2048 -m 0x800  -x lzo"                                   
+# UBINIZE_ARGS ?= " -m 0x800 -p 0x20000 -s 2048"

@@ -1,23 +1,23 @@
 require linux-stable.inc
 
+DESCRIPTION = "Mainline LTS Linux kernel"
+
 LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
-
-KERNEL_CONFIG_COMMAND = "oe_runmake_call -C ${S} CC="${KERNEL_CC}" O=${B} olddefconfig"
-
-COMPATIBLE_MACHINE = "(licheepizero|licheepizero-dock)"
-
-PR_append = ".chai"
 
 LINUX_VERSION = "5.10"
 LINUX_VERSION_EXTENSION = "-chai"
 
-FILESEXTRAPATHS_prepend := "${THISDIR}/linux-stable-${LINUX_VERSION}:"
+PV = "5.10.34"
+SRCREV = "dcee53f60bf35376343e5ede00c7466d02888ccc"
+SRCREV_meta = "219eb2a3662ee00aa048a9b496e0e6c9a80ce50a"
+KMETA = "kernel-meta"
 
-S = "${WORKDIR}/git"
-
-PV = "5.10.27"
-SRCREV = "472493c8a425f62200882c2c6acb1be2e29b3c03"
 SRC_URI = " \
     git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git;branch=linux-${LINUX_VERSION}.y \
-    file://defconfig \
+    git://git.yoctoproject.org/yocto-kernel-cache;type=kmeta;name=meta;branch=yocto-${LINUX_VERSION};destsuffix=${KMETA} \
+"
+
+KERNEL_FEATURES_append = " \
+    features/spi/spi.scc \
+    features/pwm/pwm.scc \
 "

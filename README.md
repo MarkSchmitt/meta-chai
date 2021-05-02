@@ -40,7 +40,8 @@ make
 ```bash
 sudo sunxi-tools/sunxi-fel -v uboot u-boot-sunxi-with-spl.bin \
     write 0x42000000 zImage \
-    write 0x43000000 sun8i-v3s-licheepi-zero-dock.dtb \
+    write 0x43000000 sun8i-v3s-licheepi-zero-dock-licheepizero-dock│
+.dtb \
     write 0x43100000 boot.scr
 ```
 
@@ -55,5 +56,6 @@ sudo ./sunxi-tools/sunxi-fel uboot u-boot-sunxi-with-spl.bin
 ```
 for booting from flash
 ```bash
-sudo ./sunxi-tools/sunxi-fel spiflash-write 0x0 u-boot-sunxi-with-spl.bin
+sudo ./sunxi-tools/sunxi-fel spiflash-write 0x0 u-boot-sunxi-with-spl.bin \
+    spiflash-write 0x41900000 boot.scr
 ```
