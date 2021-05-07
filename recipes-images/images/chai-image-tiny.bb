@@ -1,0 +1,1 @@
+inherit chai-image-tiny

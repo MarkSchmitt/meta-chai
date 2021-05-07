@@ -21,7 +21,6 @@ KERNEL_EXTRA_INSTALL = " \
 
 UTILITIES_INSTALL = " \
     coreutils \
-    cpufrequtils \
     mtd-utils \
     mtd-utils-ubifs \
     ldd \
