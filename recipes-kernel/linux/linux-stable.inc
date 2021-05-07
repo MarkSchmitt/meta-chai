@@ -14,6 +14,11 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/linux-stable:"
 
 # Enable OABI compat for people stuck with obsolete userspace
 ARM_KEEP_OABI ?= "0"
+KERNEL_ENABLE_CGROUPS ?= "0"
+KERNEL_ENABLE_NFS ?= "0"
+KERNEL_ENABLE_SCSI ?= "0"
+KERNEL_ENABLE_AXP20X ?= "0"
+KERNEL_ENABLE_MTD ?= "1"
 
 LOCALVERSION ?= ""
 KCONFIG_MODE ?= "alldefconfig"
@@ -22,7 +27,9 @@ KMACHINE ?= "${MACHINE}"
 # Pull in the devicetree files into the rootfs
 #RDEPENDS_${KERNEL_PACKAGE_NAME}-base += "kernel-devicetree"
 
-#KERNEL_CONFIG_COMMAND = "oe_runmake_call -C ${S} CC="${KERNEL_CC}" O=${B} olddefconfig"
+# Set the verbosity of kernel messages during runtime
+# You can define CMDLINE_DEBUG in your local.conf or distro.conf to override this behaviour
+CMDLINE_DEBUG ?= "loglevel=3"
 
 KERNEL_EXTRA_ARGS += "LOADADDR=${UBOOT_ENTRYPOINT}"
 
@@ -41,7 +48,7 @@ SRC_URI_append_sun8i = " \
 # Set a variable in .configure
 # $1 - Configure variable to be set
 # $2 - value [n/y/value]
-kernel_configure_variable() {
+kernel_conf_variable() {
     # Remove the config
     CONF_SED_SCRIPT="$CONF_SED_SCRIPT /CONFIG_$1[ =]/d;"
     if test "$2" = "n"
@@ -94,60 +101,121 @@ do_configure_prepend() {
 
     bbnote "${MACHINE_FEATURES}"
 
-    kernel_configure_variable CMDLINE "\"${CMDLINE}\""
+    kernel_conf_variable CMDLINE "\"${CMDLINE} ${CMDLINE_DEBUG}\""
 
-    kernel_configure_variable LOCALVERSION "\"${LOCALVERSION}\""
-    kernel_configure_variable LOCALVERSION_AUTO n
+    kernel_conf_variable LOCALVERSION "\"${LOCALVERSION}\""
+    kernel_conf_variable LOCALVERSION_AUTO n
 
     # /proc/config.gz
-    kernel_configure_variable IKCONFIG y
-    kernel_configure_variable IKCONFIG_PROC y
+    # kernel_conf_variable IKCONFIG y
+    # kernel_conf_variable IKCONFIG_PROC y
 
-    kernel_configure_variable SYSFS_DEPRECATED n
-    kernel_configure_variable SYSFS_DEPRECATED_V2 n
-    kernel_configure_variable HOTPLUG y
-    kernel_configure_variable UEVENT_HELPER_PATH \"\"
-    kernel_configure_variable UNIX y
-    kernel_configure_variable SYSFS y
-    kernel_configure_variable PROC_FS y
-    kernel_configure_variable TMPFS y
-    kernel_configure_variable INOTIFY_USER y
-    kernel_configure_variable SIGNALFD y
-    kernel_configure_variable TMPFS_POSIX_ACL y
-    kernel_configure_variable BLK_DEV_BSG y
-    kernel_configure_variable DEVTMPFS y
-    kernel_configure_variable DEVTMPFS_MOUNT y
+    kernel_conf_variable SYSFS_DEPRECATED n
+    kernel_conf_variable SYSFS_DEPRECATED_V2 n
+    kernel_conf_variable HOTPLUG y
+    kernel_conf_variable UEVENT_HELPER y
+    kernel_conf_variable UEVENT_HELPER_PATH \"\"
+    kernel_conf_variable UNIX y
+    kernel_conf_variable SYSFS y
+    # kernel_conf_variable PROC_FS y
+    kernel_conf_variable TMPFS y
+    kernel_conf_variable INOTIFY_USER y
+    kernel_conf_variable SIGNALFD y
+    kernel_conf_variable TMPFS_POSIX_ACL y
+    kernel_conf_variable BLK_DEV_BSG y
+    kernel_conf_variable DEVTMPFS y
+    kernel_conf_variable DEVTMPFS_MOUNT y
+    # kernel_conf_variable DEBUG_FS y
+    # kernel_conf_variable CONFIG_MEDIA_SUPPORT y
 
     # Activate the configuration options for screen
     screen="${@bb.utils.contains("MACHINE_FEATURES", "screen", "1", "0", d)}"
     if [ "${screen}" = "1" ]; then
-        kernel_configure_variable DRM y
-        kernel_configure_variable DRM_SUN4I y
-        kernel_configure_variable FB_SIMPLE y
-        kernel_configure_variable FB_SSD1307 y
-        kernel_configure_variable DRM_PANEL_SIMPLE y
+        kernel_conf_variable DRM y
+        kernel_conf_variable DRM_SUN4I y
+        kernel_conf_variable FB_SIMPLE y
+        kernel_conf_variable FB_SSD1307 y
+        kernel_conf_variable DRM_PANEL_SIMPLE y
         bbnote "screen cfg added"
+    else
+        kernel_conf_variable DRM n
+        kernel_conf_variable FB n
     fi
 
     # Activate the configuration options for alsa
     alsa="${@bb.utils.contains("MACHINE_FEATURES", "alsa", "1", "0", d)}"
     if [ "${alsa}" = "1" ]; then
-        kernel_configure_variable SOUND y
-        kernel_configure_variable SND y
-        kernel_configure_variable SND_SOC y
-        kernel_configure_variable SND_SUN4I_CODEC y
-        kernel_configure_variable SND_SUN8I_CODEC_ANALOG y
+        kernel_conf_variable SOUND y
+        kernel_conf_variable SND y
+        kernel_conf_variable SND_SOC y
+        kernel_conf_variable SND_SUN4I_CODEC y
+        kernel_conf_variable SND_SUN8I_CODEC_ANALOG y
         bbnote "alsa cfg added"
+    else
+        kernel_conf_variable SOUND n
     fi
 
     # Activate the configuration options for touchscreen
     touchscreen="${@bb.utils.contains("MACHINE_FEATURES", "touchscreen", "1", "0", d)}"
     if [ "${touchscreen}" = "1" ]; then
-        kernel_configure_variable INPUT_TOUCHSCREEN y
-        kernel_configure_variable TOUCHSCREEN_NS2009 y
-        kernel_configure_variable BACKLIGHT_PWM y
-        kernel_configure_variable PWM_SUN4I y
+        kernel_conf_variable INPUT_TOUCHSCREEN y
+        kernel_conf_variable TOUCHSCREEN_NS2009 y
+        kernel_conf_variable BACKLIGHT_PWM y
+        kernel_conf_variable PWM_SUN4I y
         bbnote "touchscreen cfg added"
+    else
+        kernel_conf_variable BACKLIGHT_CLASS_DEVICE n
+        #kernel_conf_variable BACKLIGHT_PWM n
+        kernel_conf_variable LCD_CLASS_DEVICE n
+    fi
+
+    # Newer inits like systemd need cgroup support
+    if [ "${KERNEL_ENABLE_CGROUPS}" = "1" ]; then
+        kernel_conf_variable CGROUP_SCHED y
+        kernel_conf_variable CGROUPS y
+        kernel_conf_variable CGROUP_NS y
+        kernel_conf_variable CGROUP_FREEZER y
+        kernel_conf_variable CGROUP_DEVICE y
+        kernel_conf_variable CPUSETS y
+        kernel_conf_variable PROC_PID_CPUSET y
+        kernel_conf_variable CGROUP_CPUACCT y
+        kernel_conf_variable RESOURCE_COUNTERS y
+    fi
+
+    if [ "${KERNEL_ENABLE_NFS}" = "1" ]; then
+        kernel_conf_variable NFS_FS y
+        kernel_conf_variable NFS_V3_ACL y
+        kernel_conf_variable NFS_V4 y
+        kernel_conf_variable ROOT_NFS y
+    fi
+
+    if [ "${KERNEL_ENABLE_SCSI}" = "1" ]; then
+        kernel_conf_variable SCSI y
+    fi
+
+    if [ "${KERNEL_ENABLE_MTD}" = "1" ]; then
+        kernel_conf_variable MTD y
+        #kernel_conf_variable MTD_TESTS y
+        kernel_conf_variable MTD_SWAP y
+        kernel_conf_variable MTD_CFI y
+        kernel_conf_variable MTD_JEDECPROBE y
+        kernel_conf_variable MTD_CFI_INTELEXT y
+        kernel_conf_variable MTD_CFI_AMDSTD y
+        kernel_conf_variable MTD_CFI_STAA y
+        kernel_conf_variable MTD_IMPA7 y
+        kernel_conf_variable MTD_PLATRAM y
+        kernel_conf_variable MTD_BLOCK2MTD y
+        kernel_conf_variable MTD_SPI_NOR y
+    fi
+
+    if [ "${KERNEL_ENABLE_AXP20X}" = "1" ]; then
+        kernel_conf_variable INPUT_AXP20X_PEK y
+        kernel_conf_variable CHARGER_AXP20X y
+        kernel_conf_variable BATTERY_AXP20X y
+        kernel_conf_variable CONFIG_I2C_CHARDEV y
+        kernel_conf_variable MFD_AXP20X_I2C y
+        kernel_conf_variable MFD_AXP20X_RSB y
+        kernel_conf_variable REGULATOR_AXP20X y
     fi
 
     # Keep this the last line
