@@ -126,7 +126,14 @@ do_configure_prepend() {
     kernel_conf_variable DEVTMPFS y
     kernel_conf_variable DEVTMPFS_MOUNT y
     # kernel_conf_variable DEBUG_FS y
-    # kernel_conf_variable CONFIG_MEDIA_SUPPORT y
+    # kernel_conf_variable MEDIA_SUPPORT y
+    # kernel_conf_variable FTRACE y
+    # kernel_conf_variable PRINTK_TIME y
+    # kernel_conf_variable MODULES y
+    # kernel_conf_variable MODULE_UNLOAD y
+    # kernel_conf_variable HIGHMEM y
+    kernel_conf_variable PRINTK_TIME y
+    kernel_conf_variable I2C_CHARDEV y
 
     # Activate the configuration options for screen
     screen="${@bb.utils.contains("MACHINE_FEATURES", "screen", "1", "0", d)}"
@@ -212,7 +219,6 @@ do_configure_prepend() {
         kernel_conf_variable INPUT_AXP20X_PEK y
         kernel_conf_variable CHARGER_AXP20X y
         kernel_conf_variable BATTERY_AXP20X y
-        kernel_conf_variable CONFIG_I2C_CHARDEV y
         kernel_conf_variable MFD_AXP20X_I2C y
         kernel_conf_variable MFD_AXP20X_RSB y
         kernel_conf_variable REGULATOR_AXP20X y
