@@ -60,19 +60,7 @@ index 29622199fd..136d817bb6 100644
  
  	[RST_BUS_UART0]		= RESET(0x2d8, BIT(16)),
  	[RST_BUS_UART1]		= RESET(0x2d8, BIT(17)),
-diff --git a/drivers/net/sun8i_emac.c b/drivers/net/sun8i_emac.c
-index a6cdda81a7..3554427955 100644
---- a/drivers/net/sun8i_emac.c
-+++ b/drivers/net/sun8i_emac.c
-@@ -62,7 +62,7 @@
- #define TX_TOTAL_BUFSIZE	(CONFIG_ETH_BUFSIZE * CONFIG_TX_DESCR_NUM)
- #define RX_TOTAL_BUFSIZE	(CONFIG_ETH_BUFSIZE * CONFIG_RX_DESCR_NUM)
- 
--#define H3_EPHY_DEFAULT_VALUE	0x58000
-+#define H3_EPHY_DEFAULT_VALUE	0x38000
- #define H3_EPHY_DEFAULT_MASK	GENMASK(31, 15)
- #define H3_EPHY_ADDR_SHIFT	20
- #define REG_PHY_ADDR_MASK	GENMASK(4, 0)
+
 @@ -474,7 +474,7 @@ static int sun8i_emac_eth_start(struct udevice *dev)
  	/* Soft reset MAC */
  	writel(EMAC_CTL1_SOFT_RST, priv->mac_reg + EMAC_CTL1);
