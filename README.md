@@ -17,6 +17,12 @@ export TEMPLATECONF=$PWD/sources/meta-chai/conf/variant/licheepizero-dock
 source sources/poky/oe-init-build-env build
 
 bitbake chai-image
+``` 
+
+## Preparations on gentoo:
+
+```
+sudo emerge -a chrpath diffstat
 ```
 
 ## how to use zero-dock mic
@@ -65,7 +71,7 @@ docker run --rm -it -p 69:69/udp \
 
 this image is based on a tiny golang implementation and works very well for my purposes, see https://github.com/darkautism/k8s-tftp
 
-### nfs (ongoing)
+### network boot manually
 
 to enable network boot, you need to enable kernel features by adding `KERNEL_ENABLE_NFS = "1"` to your ____local.conf__.  
 after this, your kernel shall be able to mount a nfs as rootfs
@@ -79,6 +85,29 @@ setenv ipaddr 192.168.5.78
 setenv bootcmd "tftp 0x42000000 192.168.5.80:zImage; tftp 0x43000000 192.168.5.80:sun8i-v3s-licheepi-zero-dock.dtb; bootz 0x42000000 - 0x43000000"
 run bootcmd
 ```
+
+### automatic network boot with pxe
+
+To boot using the u-boot PXE implementation, modify the boot.cmd (or enter manually):
+```
+dhcp
+pxe boot
+```
+
+And place this file into the tftp servers directory `/pxelinux.cfg/default` (this is the most default file used, you can also use a more specific one - just start it up and see what files u-boot tries to load before).
+```
+LABEL stable
+        KERNEL zImage
+        FDT sun8i-v3s-licheepi-zero-dock.dtb
+        APPEND console=ttyS0,115200 root=/dev/nfs ip=dhcp nfsroot=192.168.0.2:/srv/lichee_export_rootfs,tcp,v3 rootwait panic=2 debug 
+```
+Place the zImage and dtb file into the `/pxelinux.cfg` directory - they're searched for always relative to the config file. I think you can also use absolute paths in the config file.
+
+If your tftp server is not served on the same ip-address as your dhcp server,  you'll also need to configure your dhcp server to add it to the dhcp response.
+TODO: describe this for several usual dhcp servers. ('server-next' parameter, opnsense network boot). Most dhcp servers can be configured to serve invidual responses per client,
+this way, you can serve different default files and use this as another way to boot another pxe config file.
+
+### nfs
 
 for a detailed description of nfsroot parameters see https://www.kernel.org/doc/Documentation/filesystems/nfs/nfsroot.txt
 
